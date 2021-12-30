@@ -1,2 +1,15 @@
 <h1>Bolsa de valores</h1>
-<p>Esto cambiará pronto</p>
+<%= form_tag root_path, method: 'POST' do  %>
+	<%= text_field_tag 'simbolo', nil, placeholder: "Entre símbolo/ticker", size: 50 %>
+	<%= submit_tag 'Buscar' %>
+<% end %>
+
+<% if @bolsa %>
+	<%= @bolsa.company_name %>
+<% end %>
+<% if @nada %>
+	<%= @nada %>
+<% end %>
+<% if @error %>
+	<%= @error %>
+<% end %>
