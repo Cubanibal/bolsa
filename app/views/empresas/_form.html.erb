@@ -1,0 +1,28 @@
+<%= form_with(model: empresa) do |form| %>
+  <% if empresa.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(empresa.errors.count, "error") %> prohibited this empresa from being saved:</h2>
+
+      <ul>
+        <% empresa.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :simbolo %>
+    <%= form.text_field :simbolo %>
+  </div>
+
+  <div class="field">
+    <% form.label :usuario_id %>
+    <%= form.number_field :usuario_id, value: current_usuario.id, type: :hidden %>
+    
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

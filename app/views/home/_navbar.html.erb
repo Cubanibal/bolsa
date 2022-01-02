@@ -6,12 +6,31 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
-        
-        
+
+        <% if usuario_signed_in? %>
+          <li class="nav-item">
+               <%= link_to 'Empresas',  empresas_path, class:"nav-link"  %>
+          </li>
+          <li class="nav-item">
+               <%= link_to 'Agregar Empresa',  new_empresa_path, class:"nav-link"  %>
+          </li>
+          <li class="nav-item">
+               <%= link_to 'Cuenta',  edit_usuario_registration_path, class:"nav-link"  %>
+          </li>
+          <li class="nav-item">
+             <%= link_to 'Salir', destroy_usuario_session_path, method: :delete, data: { confirm: "¿Estás seguro?" },class:"nav-link"  %>
+          </li>
+
+        <% else %>
+          <li class="nav-item">
+             <%= link_to 'Registrarse', new_usuario_registration_path, class:"nav-link"  %>
+          </li>
+          <li class="nav-item">
+           <%= link_to 'Entrar', new_usuario_session_path, class:"nav-link"  %>
+          </li>
+
+        <% end %>
+          
       </ul>
       <%= form_tag root_path, class:"d-flex", method: 'POST' do  %>
         <%= text_field_tag 'simbolo', nil, placeholder: "Entre símbolo/ticker", size: 30, class:"form-control me-2" %>
