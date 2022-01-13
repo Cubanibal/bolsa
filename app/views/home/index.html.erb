@@ -1,11 +1,60 @@
-<h1>Bolsa de valores</h1>
-<%= form_tag root_path, method: 'POST' do  %>
-	<%= text_field_tag 'simbolo', nil, placeholder: "Entre símbolo/ticker", size: 50 %>
-	<%= submit_tag 'Buscar' %>
-<% end %>
 
+
+<h1>Bolsa de valores</h1>
+<div class="row">
+	<div class="col-sm-6">
+
+	<%= form_tag root_path, method: 'POST' do  %>
+		<%= text_field_tag 'simbolo', nil, placeholder: "Entre símbolo/ticker", size: 30 %>
+		<%= submit_tag 'Buscar' %>
+	<% end %>
+ 	</div>
+	<div class="col-sm-6">
 <% if @bolsa %>
-	<%= @bolsa.company_name %>
+
+
+	<div class="card mb-3" style="max-width: 540px;">
+        <div class="row g-0">
+            <div class="col-md-4">
+              <img src="<%= @logo.url %>" class="img-fluid rounded-start" alt="logo de la empresa">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title"><%= @bolsa.company_name %></h5>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">Símbolo: <%= @bolsa.symbol %></li>
+                  <li class="list-group-item">Sector: <%= @compania.sector %> </li>
+                  <li class="list-group-item">Capital: <%= number_with_precision(@bolsa.market_cap, :precision => 2, :delimiter => "." ) %> <%= @bolsa.currency %></li>
+                  <li class="list-group-item">CEO: <%= @compania.ceo %> </li>
+                  <li class="list-group-item">Valor actual:<strong> $<%= number_with_precision(@bolsa.latest_price, :precision => 2, :delimiter => "." ) %></strong> </li>
+                  <li class="list-group-item">Anterior cierre: $<%= number_with_precision(@bolsa.previous_close, :precision => 2, :delimiter => "." ) %> </li>
+                </ul>
+              </div>
+            </div>
+        </div>
+     </div>
+     </div>
+</div>
+<br/><br/>
+<div class="container">
+	<div class="row">
+	<% @noticias.news.each do |noticia| %>
+		<div class="col-sm">
+		<div class="card" style="width: 18rem;">
+		  <img src="<%= noticia['image'] %>" class="card-img-top" alt="<%= noticia["source"] %>">
+		  <div class="card-body">
+		    <h5 class="card-title"><%= noticia["source"] %></h5>
+		    <p class="card-text"><%= noticia["headline"] %></p>
+		    <a href="<%= noticia["url"] %>" class="btn btn-primary">Read...</a>
+		  </div>
+		</div>
+		<br/>
+		</div>	
+	<% end %>
+	</div>
+</div>
+
+	
 <% end %>
 <% if @nada %>
 	<%= @nada %>
@@ -13,3 +62,4 @@
 <% if @error %>
 	<%= @error %>
 <% end %>
+

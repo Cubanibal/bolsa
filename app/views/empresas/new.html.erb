@@ -1,5 +1,19 @@
-<h1>New Empresa</h1>
 
-<%= render 'form', empresa: @empresa %>
+<div class="card text-center" style="max-width: 540px">
+  
+  <div class="card-body">
+    <h3 class="card-title">Nueva Empresa</h3>
+    <%= render 'form', empresa: @empresa %>  
+  </div>
+  <div class="card-body text-end">
+  	<%= link_to 'Atrás', empresas_path, class:"card-link" %>
+  </div>
+</div>
 
-<%= link_to 'Back', empresas_path %>
+
+
+
+
+
+
+

@@ -1,12 +1,13 @@
 
 
-<h1>Empresas</h1>
-
-<table>
-  <thead>
+<h1>Bolsa de valores</h1>
+<div class="table-responsive">
+<table class="table table-striped table-hove table-bordered table align-middle">
+  <thead class="table-dark">
     <tr>
-      <th>Símbolo</th>
-      
+      <th  scope="col">Empresa</th>
+      <th  scope="col">Símbolo</th>
+      <th  scope="col">Precio Actual</th>
       
     </tr>
   </thead>
@@ -14,18 +15,46 @@
   <tbody>
     <% @empresas.each do |empresa| %>
       <% if empresa.usuario_id == current_usuario.id %>
+
+      <% if empresa.simbolo == "" %>
+        <% @nada = "Ehh! Has olvidado entrar la búsqueda" %>
+      <% elsif empresa.simbolo %>
+        <% begin %>
+          <% @bolsa = StockQuote::Stock.quote( empresa.simbolo ) %>
+        <% rescue => e %>
+          <% @bolsa = nil %>
+      <% end %>
+        <% if @bolsa == nil %>
+          <% @error = "Ehh! Ese símbolo no existe" %>
+        <% end %>
+    <% end %>
+    
+
+
+
+     <% if @bolsa %>
         <tr>
-          <td><%= empresa.simbolo %></td>
+          <th scope="row"><%= link_to @bolsa.company_name, empresa %></th>
+          <td><%= @bolsa.symbol %></td>
+          <td>$<%= number_with_precision(@bolsa.latest_price, :precision => 2, :delimiter => "." ) %></td>
           
-          <td><%= link_to 'Show', empresa %></td>
-          <td><%= link_to 'Edit', edit_empresa_path(empresa) %></td>
-          <td><%= link_to 'Destroy', empresa, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          
+          
         </tr>
+      <% else %>
+        <tr>
+            <td scope="row"><%= link_to empresa.simbolo, empresa %></td>
+            <td> N/A </td>
+            <td> N/A </td>
+            
+            
+          </tr>
+      <% end %>
       <% end %>
     <% end %>
   </tbody>
 </table>
-
+</div>
 <br>
 
-<%= link_to 'New Empresa', new_empresa_path %>
+<%= link_to 'Nueva Empresa', new_empresa_path,class:"btn btn-outline-primary" %>

@@ -1,11 +1,78 @@
 
 
-<p>
-  <strong>Simbolo:</strong>
-  <%= @empresa.simbolo %>
-</p>
+  <% if @empresa.simbolo == "" %>
+      <% @nada = "Ehh! Has olvidado entrar la búsqueda" %>
+  <% elsif @empresa.simbolo %>
+      <% begin %>
+          <% @bolsa = StockQuote::Stock.quote( @empresa.simbolo ) %>
+          <% @logo = StockQuote::Stock.logo( @empresa.simbolo ) %>
+          <% @compania = StockQuote::Stock.company( @empresa.simbolo ) %>
+      <% rescue => e %>
+          <% @bolsa = nil %>
+          <% @logo = nil %>
+          <% @compania = nil %>
+      <% end %>
+        <% if @bolsa == nil %>
+          <% @error = "Ehh! Ese símbolo no existe" %>
+        <% end %>
+  <% end %>
+    
 
 
 
-<%= link_to 'Edit', edit_empresa_path(@empresa) %> |
-<%= link_to 'Back', empresas_path %>
+     <% if @bolsa %>
+
+        <div class="card mb-3" style="max-width: 540px;">
+          <div class="row g-0">
+            <div class="col-md-4">
+              <img src="<%= @logo.url %>" class="img-fluid rounded-start" alt="logo de la empresa">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title"><%= @bolsa.company_name %></h5>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">Símbolo: <%= @bolsa.symbol %></li>
+                  <li class="list-group-item">Sector: <%= @compania.sector %> </li>
+                  <li class="list-group-item">Capital: <%= number_with_precision(@bolsa.market_cap, :precision => 2, :delimiter => "." ) %> <%= @bolsa.currency %></li>
+                  <li class="list-group-item">CEO: <%= @compania.ceo %> </li>
+                  <li class="list-group-item">Valor actual:<strong> $<%= number_with_precision(@bolsa.latest_price, :precision => 2, :delimiter => "." ) %></strong> </li>
+                  <li class="list-group-item">Anterior cierre: $<%= number_with_precision(@bolsa.previous_close, :precision => 2, :delimiter => "." ) %> </li>
+                </ul>
+              </div>
+            </div>
+            </div>
+            <div class="card-body">
+                <p class="card-text"><small class="text-muted"><%= @compania.description %></small></p>
+            </div>
+            <div class="card-body text-end">
+              <%= link_to 'Atrás', empresas_path, class:"card-link" %>
+              <%= link_to 'Editar', edit_empresa_path(@empresa), class:"card-link" %>
+              <%= link_to 'Eliminar', @empresa, method: :delete, data: { confirm: 'Estás seguro?' }, class:"card-link" %>
+            </div>
+          </div>
+        </div>
+    
+      <% else %>
+
+      <div class="card text-center">
+        <div class="card-header">
+          ERROR
+        </div>
+        <div class="card-body">
+          <h5 class="card-title"><%= @empresa.simbolo %></h5>
+          <p class="card-text">El símbolo no existe o no tenemos información sobre el mismo.</p>
+          <%= link_to 'Eliminar', @empresa, method: :delete, data: { confirm: 'Estás seguro?' }, class:"btn btn-primary"%>
+          
+        </div>
+        <div class="card-footer text-muted">
+          Elimínelo, por favor
+        </div>
+      </div>
+         
+        
+      <% end %>
+
+
+
+ |
+
